@@ -4,24 +4,27 @@ services:
 
   web1:
     image: nginx:alpine
-    ports:
-      - "8091:80"
     volumes:
       - ./web1html:/usr/share/nginx/html
 
   web2:
     image: nginx:alpine
-    ports:
-      - "8092:80"
     volumes:
       - ./web2html:/usr/share/nginx/html
 
   haproxy:
     build: ./haproxy/
-    ports:
-      - "8090:80"
     volumes:
       - ./haproxy/conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     depends_on:
       - web1
       - web2
+
+  varnish:
+    build: ./varnish/
+    volumes:
+      - ./varnish/conf/default.vcl:/etc/varnish/default.vcl
+    depends_on:
+      - haproxy
+    ports:
+      - "80:80"
