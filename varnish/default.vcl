@@ -25,7 +25,7 @@ sub vcl_recv {
 	    	return(pass); # no se almacenará en caché, se pasa directamente al servidor
     }
 
-    if (req.url ~ "index.html") {
+    if (req.url ~ "^/") {
         return (hash); # se hace uso de caché
     }
 }

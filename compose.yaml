@@ -21,10 +21,12 @@ services:
       - web2
 
   varnish:
-    build: ./varnish/
-    volumes:
-      - ./varnish/conf/default.vcl:/etc/varnish/default.vcl
+    image: varnish:6.6
     depends_on:
-      - haproxy
+      - haproxy    
     ports:
-      - "80:80"
+      - "8042:80"
+    volumes:
+      - ./varnish/default.vcl:/etc/varnish/default.vcl:ro
+    environment:
+      - VARNISH_SIZE=256M
